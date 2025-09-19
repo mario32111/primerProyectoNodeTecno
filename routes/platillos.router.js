@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
       return {
         id: doc.id,
         nombre: data.nombre,
-        categoriaId: data.categoria.path.split('/')[1],
+        categoriaId: data.categoriaId,
         descripcion: data.descripcion,
         precio: data.precio
       };
