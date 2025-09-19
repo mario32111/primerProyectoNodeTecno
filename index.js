@@ -1,15 +1,16 @@
-const http = require('http');
+// index.js
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const routerApi = require('./routes');
+require('./db'); // Solo necesitas importarlo para que se inicialice
 
-const app = http.createServer((req, res) =>{
-    //el encabezado le dice al exporador con que tipo de recurso va a trabajar
-    res.writeHead(200, {
-        'Content-Type': 'application/json'
-    });
-    res.end('servidor nodew iniciado')
-});
+app.use(express.json());
+app.use(cors());
 
-const PORT = 3000;
+// Conecta todas las rutas a la aplicación
+routerApi(app);
 
-app.listen(PORT);
-
-console.log('SERVIDOR LEVANTADO EN EL PUERTO', PORT);
+// Conexión al servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
