@@ -6,9 +6,12 @@ const { db, Timestamp } = require('../db'); // Importa la conexión centralizada
 router.post("/", async (req, res) => { //Ruta POST
   try {
     const { apellido, nombre, telefono } = req.body;
-    // Usar Timestamp de Firebase para fecha_contratacion
-    const fecha_contratacion = admin.firestore.Timestamp.now();
+    // Usar Timestamp de Firebase para fecha_contratacion    
+    const fecha_contratacion = Timestamp.now();
     console.log(fecha_contratacion);
+        if (!apellido || !nombre || !telefono) {
+      return res.status(400).json({ message: "Faltan campos obligatorios: apellido, nombre, o telefono." });
+    }
     // Agregar documento a la colección "meseros"
     const docRef = await db.collection("meseros").add({ apellido, fecha_contratacion, nombre, telefono });
     res.json({ id: docRef.id, message: "Mesero agregado" });
@@ -60,7 +63,7 @@ router.get("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const fecha_contratacion = admin.firestore.Timestamp.now();
+    const fecha_contratacion = Timestamp.now();
     console.log(fecha_contratacion, id, req.body.apellido, req.body.nombre, req.body.telefono);
     const data = await db.collection("meseros").doc(id).update({ ...req.body });
     res.json({ message: "Mesero modificado completamente", data });
@@ -73,7 +76,7 @@ router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { apellido, nombre, telefono } = req.body;
-    const fecha_contratacion = admin.firestore.Timestamp.now();
+    const fecha_contratacion = Timestamp.now();
     await db.collection("meseros").doc(id).set({ apellido, nombre, telefono, fecha_contratacion });
     // Leer el documento actualizado para devolver los datos nuevos
     const updatedSnap = await db.collection("meseros").doc(id).get();
@@ -88,7 +91,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await db.collection("meseros").doc(id).delete();
+    await db.collection("platillos").doc(id).delete();
     res.json({ message: "Mesero eliminado" });
   } catch (error) {
     res.status(500).json({ error: error.message });
