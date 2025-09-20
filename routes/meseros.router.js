@@ -66,7 +66,7 @@ router.patch("/:id", async (req, res) => {
     const fecha_contratacion = Timestamp.now();
     console.log(fecha_contratacion, id, req.body.apellido, req.body.nombre, req.body.telefono);
     const data = await db.collection("meseros").doc(id).update({ ...req.body });
-    res.json({ message: "Mesero modificado completamente", data });
+    res.json({ message: "Mesero modificado parcialmente", data });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -82,7 +82,7 @@ router.put("/:id", async (req, res) => {
     const updatedSnap = await db.collection("meseros").doc(id).get();
     const updatedData = { id: updatedSnap.id, ...updatedSnap.data() };
 
-    res.json({ message: "Mesero actualizado parcialmente", data: updatedData });
+    res.json({ message: "Mesero actualizado completamente", data: updatedData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

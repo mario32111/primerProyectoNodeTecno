@@ -106,7 +106,7 @@ router.put("/:id", async (req, res) => {
     const updatedSnap = await db.collection("platillos").doc(id).get();
     const updatedData = { id: updatedSnap.id, ...updatedSnap.data() };
 
-    res.json({ message: "Platillo actualizado parcialmente", data: updatedData });
+    res.json({ message: "Platillo actualizado completamente", data: updatedData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
